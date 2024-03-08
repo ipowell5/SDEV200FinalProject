@@ -1,9 +1,8 @@
-// AbstractSceneClass.java
 public abstract class AbstractSceneClass {
     protected String title;
     protected String description;
     protected String[] choices;
-
+    
     public AbstractSceneClass(String title, String description, String[] choices) {
         this.title = title;
         this.description = description;
@@ -33,8 +32,7 @@ public abstract class AbstractSceneClass {
     public void setChoices(String[] choices) {
         this.choices = choices;
     }
-
-    // Abstract method to be implemented by subclasses to get the next scene based on user choice
+    
     public abstract AbstractSceneClass getNextScene(String userChoice);
 }
 
