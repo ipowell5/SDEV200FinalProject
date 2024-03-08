@@ -1,14 +1,15 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class StorytellingApp extends Application {
+public class StorytellingApp extends Application implements EventHandler<ActionEvent> {
 
     private MainStorylineClass storyline;
     private Label titleLabel;
@@ -18,7 +19,7 @@ public class StorytellingApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Initialize your storyline and initial scene
+        // Initialize the storyline and initial scene
         AbstractSceneClass initialScene = createInitialScene();
         Player player = new Player();
         storyline = new MainStorylineClass(initialScene, player);
@@ -34,13 +35,14 @@ public class StorytellingApp extends Application {
         root.setPadding(new Insets(10));
         root.getChildren().addAll(titleLabel, descriptionLabel, choice1Button, choice2Button);
 
-        // moved this here
         updateSceneGUI();
         
         // Create and set the scene
         Scene scene = new Scene(root, 400, 300);
-        scene.setOnMouseMoved(e -> handleMouseHover(e.getX(), e.getY()));
         scene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
+        
+        choice1Button.setOnAction(this);
+        choice2Button.setOnAction(this);
         
         primaryStage.setScene(scene);
         primaryStage.setTitle("Storytelling App");
@@ -51,7 +53,7 @@ public class StorytellingApp extends Application {
         // Create and return the initial scene
         return new SceneSubclass(
             "Welcome to The Door of Destiny",
-            "You stand in front of a large door, adorned with intricate carvings. Above it, a sign reads 'The Door of Destiny'. What will you do?",
+            "You stand in front of a large door, adorned with intricate carvings.\nAbove it, a sign reads 'The Door of Destiny'. What will you do?",
             new String[]{"Enter", "Turn around and run away"},
             "Image of a door",
             new String[]{"Door"},
@@ -59,65 +61,7 @@ public class StorytellingApp extends Application {
         );
     }
 
-    private AbstractSceneClass createScene2() {
-        // Create and return scene 2
-        return new SceneSubclass(
-            "Dark Forest Encounter",
-            "You open the door and find yourself in a dark forest. As you walk, a comically large owl perches on a branch. It asks for a token of gratitude. What will you give?",
-            new String[]{"Give the large owl your quarter", "Give the large owl your gum"},
-            "Image of a large owl",
-            new String[]{"Owl"},
-            new String[]{"Path"}
-        );
-    }
-
-    private AbstractSceneClass createScene3Quarter() {
-        // Create and return scene 3 if quarter is given
-        return new SceneSubclass(
-            "Owl Attack",
-            "You give the large owl your quarter. In a flash, it transforms into a ferocious creature and attacks you. Your adventure ends here.",
-            new String[]{},
-            "Image of a terrifying owl",
-            new String[]{"Creature"},
-            new String[]{"Path"}
-        );
-    }
-
-    private AbstractSceneClass createScene3Gum() {
-        // Create and return scene 3 if gum is given
-        return new SceneSubclass(
-            "Forest Path",
-            "The owl happily accepts your gum and lets you pass. You continue down the forest path.",
-            new String[]{},
-            "Image of a forest path",
-            new String[]{"Trees"},
-            new String[]{"Path"}
-        );
-    }
-
-    private AbstractSceneClass createScene4Apple() {
-        // Create and return scene 4 if apple is eaten
-        return new SceneSubclass(
-            "The Forbidden Apple",
-            "You take a bite from the golden apple. Immediately, you feel a strange sensation in your body. You collapse to the ground, paralyzed. Your journey ends here.",
-            new String[]{},
-            "Image of a golden apple",
-            new String[]{"Apple"},
-            new String[]{"Path"}
-        );
-    }
-
-    private AbstractSceneClass createScene4Pocket() {
-        // Create and return scene 4 if apple is put in pocket
-        return new SceneSubclass(
-            "Castle Encounter",
-            "As you approach the castle, you find a golden gate. You show the golden apple to the guards, and they allow you to enter. Inside, you encounter a beautiful elven princess.",
-            new String[]{"Tell her you are here to rescue her", "Give her the golden apple from your pocket"},
-            "Image of a castle",
-            new String[]{"Castle"},
-            new String[]{"Gate"}
-        );
-    }
+   
 
     private void handleChoice(String choice) {
         // Set user choice and progress the story
@@ -126,6 +70,18 @@ public class StorytellingApp extends Application {
 
         // Update GUI with the new scene details
         updateSceneGUI();
+    }
+    
+    public void handle(ActionEvent event) {
+        if(event.getSource() == choice1Button) {
+        	System.out.println("clicked "+choice1Button.getText());
+        	handleChoice(choice1Button.getText());
+        
+        }
+        else {
+        	System.out.println("clicked "+choice1Button.getText());
+        	handleChoice(choice2Button.getText());
+        }   
     }
 
     private void updateSceneGUI() {
@@ -149,14 +105,7 @@ public class StorytellingApp extends Application {
         }
     }
 
-    private void handleMouseHover(double x, double y) {
-        // Implement mouse hover event
-        // Provide additional information or context based on the hovered element
-        System.out.println("Mouse Hover: (" + x + ", " + y + ")");
-    }
-
     private void handleKeyPress(KeyCode keyCode) {
-        // Implement keyboard input event
         System.out.println("Key Pressed: " + keyCode);
         if (keyCode == KeyCode.ENTER) {
             // click the first choice button when Enter key is pressed
